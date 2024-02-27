@@ -1,0 +1,6 @@
+\documentclass{article}
+\title{First report of ECG signal}
+\begin{document}
+\maketitle
+Content begin
+\end{document}
