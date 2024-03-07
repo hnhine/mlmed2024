@@ -1,0 +1,49 @@
+\documentclass[twocolumn]{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Electrocardiogram heartbeat classification}
+\author{Nhi Doan Hoai\\\\BI12-338 Data Science}
+
+\date{February 2024}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\small
+\renewcommand{\abstractname}{\small Abstract}
+I tried to design a simple network using CNN to classify the ECG 
+%Go On with a summary of the next chapters
+
+\end{abstract}
+
+\section{Introduction}
+
+- Heart 
+One of the most important organs in our body is heart. It pumps blood around the body, provides oxygen and nutrients to all parts. When it works, the contraction of the atria and ventricles makes a heartbeat. Heartbeat classification plays a crucial role in clinical diagnosis, enabling the detection and monitoring of various cardiovascular conditions. However, it takes a lot of time for the doctor to detect abnormality of heartbeat. To deal with this\\
+- Heartbeat
+- Heartbeat in clinical diagnosis\\
+- ML\\
+- ML in heartbeat Classification: what and why?\\
+- What other people do in ML for heartbeat Classification: survey\\
+-State problem
+\section{Background}
+ECG4\\
+
+Different method you use: \\
+CNN
+\section{Methodology}
+CNN architecture
+
+\section{Evaluation}
+Dataset\\
+
+Metric
+
+
+\section{Conclusion}
+
+what you did, what you did not do, what's wrong
+\end{document}
+
