@@ -1,5 +1,7 @@
 \documentclass[twocolumn]{article}
 \usepackage{graphicx} % Required for inserting images
+\graphicspath{ {./figure/} }
+\usepackage{caption}
 
 \title{Electrocardiogram heartbeat classification}
 \author{Nhi Doan Hoai\\\\BI12-338 Data Science}
@@ -20,30 +22,111 @@ I tried to design a simple network using CNN to classify the ECG
 
 \section{Introduction}
 
-- Heart 
-One of the most important organs in our body is heart. It pumps blood around the body, provides oxygen and nutrients to all parts. When it works, the contraction of the atria and ventricles makes a heartbeat. Heartbeat classification plays a crucial role in clinical diagnosis, enabling the detection and monitoring of various cardiovascular conditions. However, it takes a lot of time for the doctor to detect abnormality of heartbeat. To deal with this\\
-- Heartbeat
-- Heartbeat in clinical diagnosis\\
-- ML\\
-- ML in heartbeat Classification: what and why?\\
-- What other people do in ML for heartbeat Classification: survey\\
--State problem
+One of the most important organs in our body is heart. It pumps blood around the body, provides oxygen and nutrients to all parts. When it works, the contraction of the atria and ventricles makes a heartbeat. Heartbeat classification plays a crucial role in clinical diagnosis, enabling the detection and monitoring of various cardiovascular conditions. However, it takes a lot of time for the doctor to detect abnormality of heartbeat. In order to address this challenge and expedite the diagnostic process, alternative approaches are being explored.\\
+A comprehensive survey of existing research in the field of ML for heartbeat classification reveals a wide range of approaches and techniques employed by researchers. These include various feature extraction methods, such as time-domain and frequency-domain analysis, as well as different ML algorithms like Support Vector Machines (SVM), Artificial Neural Networks (ANN), and Random Forests (RF). Additionally, studies have explored the use of deep learning architectures, such as Convolutional Neural Networks (CNN) and Recurrent Neural Networks (RNN), for more advanced heartbeat classification tasks.\\
+In this project, I will try to make a simple model which is easy to build and do not requires powelful computer to train.
 \section{Background}
-ECG4\\
-
-Different method you use: \\
-CNN
+\subsection{ECG}
+The evaluation of the heart can be done using an electrocardiogram (ECG), which is a fast and simple test. Electrodes made of plastic patches are placed on the chest, arms, and legs. These electrodes are connected to an ECG machine using lead wires. The electrical activity of the heart is measured, interpreted, and then printed out. No electricity is transmitted into the body.
+\\
+The natural electrical impulses in the heart coordinate and regulate the contractions of different parts to maintain healthy blood flow. An ECG captures these impulses to show the heart's beating speed, the rhythm of the heartbeats (steady or irregular), and the timing and strength of the electrical impulses as they travel through different parts of the heart. A change in ECG readings may indicate various heart-related conditions.
+\subsection{Approach Analysis}
+Convolutional neural networks(CNNs) are well-known in the field of computer vision with their application is to extract the feature of image. It was first introduced by Yann LeCun in 1980s,  are analogous to traditional ANNs. Their powerful ability to work with image is due to the kernel - a fixed-size filter that convolves the image pixels into output layer or usually named feature map .However, in this case for signal, I want to use CNN because the signal is time series data. It means that we could take advantage of CNN to find patterns and characteristics of local data points.
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/1D-CNN-vs-2D-CNN-.jpg}
+  \caption{1D CNN vs. 2D CNN in feature detection. The shape of convolution filter is a vector form in 1D CNN while a 2D matrix form in 2D CNN.}
+  \label{fig:0}
+\end{figure}
 \section{Methodology}
-CNN architecture
-
+My desire when creating this architecture is to make a simple one. I just apply one CNN layer, some fully connected layers and here we go!
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/pipeline.drawio.png}
+  \caption{Model architecture}
+  \label{fig:1}
+\end{figure}
 \section{Evaluation}
-Dataset\\
+\subsection{Dataset}
+Physikalisch-Technische Bundesanstalt (PTB) Diagnostic ECG Database is a collection of 549 high-resolution 15-lead ECGs (12 standard leads together with Frank XYZ leads), including clinical summaries for each record. From one to five ECG records are available for each of the 294 subjects, who include healthy subjects as well as patients with a variety of heart diseases.\\
+Our dataset use in this labwork is a subset of the PTB Diagnostic ECG Database. The detail information:
+\begin{itemize}
+  \item Number of Samples: 14552
+  \item Number of Categories: 2
+  \item Sampling Frequency: 125Hz
+  \item Data Source: Physionet's PTB Diagnostic Database
+\end{itemize}
 
-Metric
+Belows are the first 20 signals for each class:
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/sample_ab.png}
+  \caption{Sample signals of abnormal heartbeat}
+  \label{fig:2}
+\end{figure}
+Since the distribution is imbalance, I will apply under-sampling for Abnormal class.\\
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/sample_normal.png}
+  \caption{Sample signals of normal heartbeat}
+  \label{fig:3}
+\end{figure}
+It is easy to recognize that the normal signal heartbeat has a trend which is a peak in the left part. In the abnormal signal heartbeat, each of them is quite chaotic.
+\\ \\
+For the number of samples, there is a strong imbalance between two classes. The abnormal signal is nearly over three times than normal one - which is quite rare. This situation could lead to wrong predict for patient since more people are more likely to be misdiagnosed as having the disease. Although, this seems not seriously but to make the dataset like "reality", I apply under-sampling for the abnormal class.
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/class_prob.png}
+  \caption{Distribution between 2 classes before}
+  \label{fig:4}
+\end{figure}
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/class_balance.png}
+  \caption{Distribution between 2 classes after}
+  \label{fig:5}
+\end{figure}
+%\vfill\null
+%\columnbreak
 
+\\Now, everything are equally distributed. We will use this dataset for training model.
+\subsection{Training phase}
+I train this model in only 10 epochs which batch size is 32. The ratio for train, validation, and test dataset is 80-10-10. Since, the dataset is not large, training time is about 2 minutes with average time for each epoch approximately 12 seconds.
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/train_loss.png}
+  \caption{Loss in training phase on train and validation dataset}
+  \label{fig:6}
+\end{figure}
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/train_acc.png}
+  \caption{Accuracy in training phase on train and validation dataset}
+  \label{fig:7}
+\end{figure}
+It is easy to recognize that overfitting is not here. Therefor, our model with nearly 88\% is acceptable(without considering too much about its practical application).
+\subsection{Metric}
+\begin{itemize}
+  \item Accuracy: The proportion of correct predictions out of the total number of predictions.
+  \item Precision: The proportion of true positives among the predicted positives.
+  \item Recall: The proportion of true positives among the actual positives.
+  \item Specificity: The proportion of true negatives among the actual negatives.
+  \item F1-score: The harmonic mean of precision and recall, ranging from 0 to 1.
+\end{itemize}
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/confussion_matrix.png}
+  \caption{Confussion matrix}
+  \label{fig:8}
+\end{figure}
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/auc.png}
+  \caption{AUC curve}
+  \label{fig:10}
+\end{figure}
+\begin{figure}[hbt!]
+  \includegraphics[width=0.9\columnwidth]{figure/ev_metrics.png}
+  \caption{Evaluation metrics}
+  \label{fig:9}
+\end{figure}
 
+\newpage
 \section{Conclusion}
+The utilization of a straightforward 1D Convolutional Neural Network (CNN) for ECG classification has yielded promising results, demonstrating an accuracy of 88\%. This underscores the efficacy of leveraging convolutional layers to capture temporal patterns and features within electrocardiogram (ECG) signals.
 
-what you did, what you did not do, what's wrong
+The simplicity of the model design is particularly advantageous, as it not only facilitates training efficiency but also makes the model interpretable. Despite its simplicity, the achieved accuracy showcases the ability of the 1D CNN to discern relevant information from ECG data, contributing to accurate classification.
+
+As with any model, there may be areas for improvement. Further exploration of hyperparameter tuning, such as adjusting the number of filters, kernel sizes, or the architecture of the network, could potentially enhance the model's performance. Additionally, considering the inclusion of recurrent layers or attention mechanisms may capture long-term dependencies within the ECG signals.
 \end{document}
 
